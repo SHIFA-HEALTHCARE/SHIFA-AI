@@ -1,5 +1,5 @@
 #Important Modules
-from flask import Flask,render_template, url_for ,flash , redirect
+from flask import Flask,render_template, url_for ,flash , redirect, jsonify
 import joblib
 from flask import request
 import numpy as np
@@ -69,6 +69,7 @@ def ValuePredictor(to_predict_list, diseaseType):
 @app.route('/result',methods = ["POST"])
 def result():
     if request.method == 'POST':
+        print(request.form)
         to_predict_list = request.form.to_dict()
         to_predict_list=list(to_predict_list.values())
         to_predict_list = list(map(float, to_predict_list))
@@ -80,6 +81,135 @@ def result():
         prediction='We predict that you are healthy!' 
     return(render_template("result.html", prediction=prediction))
 
+@app.route('/p_diabetes',methods = ["GET"])
+def predict_diabetes():
+    if request.method == 'GET':
+        diseaseType = "diabetes"
+        
+        Pregnancies = request.args.get('pregnancies', -1, int)
+        Glucose = request.args.get('glucose', -1, int)
+        BloodPressure = request.args.get('blood-pressure', -1, int)
+        SkinThickness = request.args.get('skin-thickness', -1, int)
+        Insulin = request.args.get('insulin', -1, int)
+        Bmi = request.args.get('bmi', -1, float)
+        DiabetesPedigreeFunction = request.args.get('dpf', -1, float)
+        Age = request.args.get('age', -1, int)
+    
+        to_predict_list = [Pregnancies,Glucose,BloodPressure,SkinThickness,Insulin,Bmi,DiabetesPedigreeFunction,Age,]
+
+        if any(value < 0 for value in to_predict_list):
+            response = {
+            "Status" : False,
+            "Error" : "Invalid Arguments",
+            }
+  
+            return jsonify(response)
+
+        result = ValuePredictor(to_predict_list, diseaseType)
+
+    if(int(result)==1):
+        response = {
+            "Status" : True,
+            "Suffering" : True,
+            }
+  
+        return jsonify(response)
+    else:
+        response = {
+            "Status" : True,
+            "Suffering" : False,
+            }
+  
+        return jsonify(response)
+
+@app.route('/p_heart',methods = ["GET"])
+def predict_heart():
+    if request.method == 'GET':
+        diseaseType = "heart"
+        
+        Age = request.args.get('age', -1, int)
+        Sex = request.args.get('male', True, bool)
+        Cpt = request.args.get('chest-pain-type', -1, int)
+        TrestBPS = request.args.get('trest-bps', -1, int)
+        Cholestrol = request.args.get('cholestrol', -1, int)
+        RestECG = request.args.get('rest-ecg', -1, int)
+        Thalach = request.args.get('thalach', -1, int)
+        Exang = request.args.get('exang', True, bool)
+        OldPeak = request.args.get('old-peak', -1, float)
+        Slope = request.args.get('slope', -1, int)
+        Thal = request.args.get('thal', -1, int)
+        
+    
+        to_predict_list = [Age,Sex,Cpt,TrestBPS,Cholestrol,RestECG,Thalach,Exang,OldPeak,Slope,Thal]
+
+        if any(value < 0 for value in to_predict_list) or (Cpt > 3) or (RestECG > 2) or (Slope > 2) or (Thal > 3):
+            response = {
+            "Status" : False,
+            "Error" : "Invalid Arguments",
+            }
+  
+            return jsonify(response)
+
+        result = ValuePredictor(to_predict_list, diseaseType)
+
+    if(int(result)==1):
+        response = {
+            "Status" : True,
+            "Suffering" : True,
+            }
+  
+        return jsonify(response)
+    else:
+        response = {
+            "Status" : True,
+            "Suffering" : False,
+            }
+  
+        return jsonify(response)
+
+@app.route('/p_liver',methods = ["GET"])
+def predict_liver():
+    if request.method == 'GET':
+        diseaseType = "liver"
+        
+        Age = request.args.get('age', -1, int)
+        Gender = request.args.get('male', False, bool)
+        TotalBilirubin = request.args.get('total-bilirubin', -1, float)
+        DirectBilirubin = request.args.get('direct-bilirubin', -1, float)
+        AlkalinePhosphotase = request.args.get('alkaline-phosphotase', -1, int)
+        AlamineAminotransferase = request.args.get('alamine-aminotransferase', -1, int)
+        AspartateAminotransferase = request.args.get('aspartate-aminotransferase', -1, int)
+        TotalProtiens = request.args.get('total-protiens', -1, float)
+        Albumin = request.args.get('albumin', -1, float)
+        AlbuminGlobulinRatio = request.args.get('albumin-globulin-ratio', -1, float)
+    
+        to_predict_list = [Age,Gender,TotalBilirubin,DirectBilirubin,AlkalinePhosphotase,
+        AlamineAminotransferase,AspartateAminotransferase,TotalProtiens,Albumin,AlbuminGlobulinRatio]
+
+        if any(value < 0 for value in to_predict_list):
+            response = {
+            "Status" : False,
+            "Error" : "Invalid Arguments",
+            }
+  
+            return jsonify(response)
+
+        result = ValuePredictor(to_predict_list, diseaseType)
+
+    if(int(result)==1):
+        response = {
+            "Status" : True,
+            "Suffering" : True,
+            }
+  
+        return jsonify(response)
+    else:
+        response = {
+            "Status" : True,
+            "Suffering" : False,
+            }
+  
+        return jsonify(response)
 
 if __name__ == "__main__":
     app.run(debug=True)
