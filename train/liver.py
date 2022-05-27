@@ -1,38 +1,41 @@
-import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler
-import random
-from sklearn.model_selection import ShuffleSplit
-from sklearn.model_selection import cross_validate
-from imblearn.over_sampling import SMOTE
+import pandas as pd
+from sklearn import ensemble
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import joblib
 import os
 
 directory = os.getcwd()
 
-data=pd.read_csv(directory + "/dataset/liver.csv")
-data=data.fillna(method="ffill")
-data.Gender=data.Gender.map({"Female":1,"Male":0})
-data["Dataset"]=data["Dataset"].map({1:0,2:1})
-np.random.shuffle(data.values)
-print(data.shape[1])
-print(data.columns)
+patients=pd.read_csv(directory + "/dataset/liver.csv")
 
 
-target=data["Dataset"]
-source=data.drop(["Dataset"],axis=1)
-sm=SMOTE()
-sc=StandardScaler()
-lr=LogisticRegression()
-source=sc.fit_transform(source)
-X_train,X_test,y_train,y_test= train_test_split(source,target,test_size=0.01)
-X_train, y_train=sm.fit_resample(X_train,y_train)
-cv=cross_validate(lr,X_train,y_train,cv=10)
-lr.fit(X_train,y_train)
-print(cv)
-joblib.dump(lr,directory + "/models/liver")
+patients['Gender']=patients['Gender'].apply(lambda x:1 if x=='Male' else 0)
+patients=patients.fillna(0.94)
+
+X=patients[['Total_Bilirubin', 'Direct_Bilirubin',
+       'Alkaline_Phosphotase', 'Alamine_Aminotransferase',
+       'Total_Protiens', 'Albumin', 'Albumin_and_Globulin_Ratio']]
+y=patients['Dataset']
+
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.3,random_state=123)
+
+print('Shape training set: X:{}, y:{}'.format(X_train.shape, y_train.shape))
+print('Shape test set: X:{}, y:{}'.format(X_test.shape, y_test.shape))
+
+model = ensemble.RandomForestClassifier()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print('Accuracy : {}'.format(accuracy_score(y_test, y_pred)))
+
+clf_report = classification_report(y_test, y_pred)
+print('Classification report')
+print("---------------------")
+print(clf_report)
+print("_____________________")
+
+joblib.dump(model,directory + "/models/liver")
 
 
 

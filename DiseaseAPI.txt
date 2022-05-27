@@ -1,0 +1,37 @@
+Diabetes:
+
+
+Suffering Response:
+
+http://127.0.0.1:5000/p_diabetes?pregnancies=3&glucose=70&blood-pressure=120&skin-thickness=34&insulin=343&bmi=324&dpf=23&age=34
+
+Healthy Response:
+
+http://127.0.0.1:5000/p_diabetes?pregnancies=1&glucose=85&blood-pressure=66&skin-thickness=29&insulin=0&bmi=26.6&dpf=0.351&age=31
+
+
+
+Liver:
+
+
+Suffering Response:
+
+http://127.0.0.1:5000/p_liver?total-bilirubin=7.0&direct-bilirubin=0.5&alkaline-phosphotase=200&alamine-aminotransferase=20&total-protiens=7.0&albumin=3.3&albumin-globulin-ratio=0.74
+
+Healthy Response:
+
+http://127.0.0.1:5000/p_liver?total-bilirubin=0.9&direct-bilirubin=0.3&alkaline-phosphotase=310&alamine-aminotransferase=61&total-protiens=7&albumin=3.4&albumin-globulin-ratio=0.9
+
+
+
+Heart:
+
+
+Suffering Response:
+
+http://127.0.0.1:5000/p_heart?age=40&male=true&chest-pain-type=2&trest-bps=130&cholestrol=205&rest-ecg=1&thalach=160&exang=false&old-peak=2.5&slope=1&thal=2
+
+Healthy Response:
+
+http://127.0.0.1:5000/p_heart?age=40&male=true&chest-pain-type=2&trest-bps=130&cholestrol=205&rest-ecg=1&thalach=160&exang=true&old-peak=2.5&slope=1&thal=2
+
