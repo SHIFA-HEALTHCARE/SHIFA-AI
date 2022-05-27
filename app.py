@@ -77,17 +77,19 @@ def result():
 
 def prediction_response(result):
     if(int(result)==1):
-        response = {
+        prediction = {
             "Suffering" : True
             }
-  
-        return jsonify(response)
+        response =  jsonify(prediction)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
     else:
-        response = {
+        prediction = {
             "Suffering" : False
             }
-  
-        return jsonify(response)
+        response = jsonify(prediction)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
 @app.route('/p_diabetes',methods = ["GET"])
 def predict_diabetes():
