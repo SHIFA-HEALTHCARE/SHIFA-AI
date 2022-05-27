@@ -3,7 +3,6 @@ import numpy as np
 import joblib
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
-import random
 from sklearn.model_selection import ShuffleSplit
 from sklearn.model_selection import cross_validate
 

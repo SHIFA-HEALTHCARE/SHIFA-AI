@@ -66,7 +66,7 @@ def result():
         to_predict_list=list(to_predict_list.values())
         to_predict_list = list(map(float, to_predict_list))
         diseaseType = request.args.get('disease')
-        print(to_predict_list)
+       
         result = ValuePredictor(to_predict_list, diseaseType)
     if(int(result)==1):
         prediction='We predict that you are suffering from this disease.\nPlease consult a doctor immediately'
